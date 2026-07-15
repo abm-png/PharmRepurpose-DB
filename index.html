@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmTarget - Atlas Interactif de Pharmacologie</title>
+    <!-- Tailwind CSS pour un design ultra moderne -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes pulse-heart {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+        .animate-heart {
+            animation: pulse-heart var(--pulse-duration, 1s) infinite ease-in-out;
+        }
+        @keyframes flow-ion {
+            0% { transform: translateY(-20px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(30px); opacity: 0; }
+        }
+        .ion-drop {
+            animation: flow-ion 1.5s infinite linear;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-950 p-4 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl">🔬</span>
+                <h1 class="text-xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                    PharmTarget
+                </h1>
+            </div>
+            <span class="bg-emerald-500/10 text-emerald-400 text-xs px-2.5 py-1 rounded-full border border-emerald-500/20 font-medium">
+                Prototype UCLouvain v1.0
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Sidebar : Liste des médicaments de tes diapositives -->
+        <section class="lg:col-span-4 bg-slate-950/50 border border-slate-800 rounded-2xl p-4 flex flex-col space-y-3">
+            <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">Molécules du cours</h2>
+            
+            <button onclick="selectDrug('ivabradine')" id="btn-ivabradine" class="drug-btn w-full text-left p-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition flex justify-between items-center">
+                <div>
+                    <div class="font-semibold text-slate-200">Ivabradine (Procoralan®)</div>
+                    <div class="text-xs text-slate-400 mt-1">Inhibiteur du courant If</div>
+                </div>
+                <span class="text-emerald-400">➔</span>
+            </button>
+
+            <button onclick="selectDrug('dapagliflozine')" id="btn-dapagliflozine" class="drug-btn w-full text-left p-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition flex justify-between items-center">
+                <div>
+                    <div class="font-semibold text-slate-200">Dapagliflozine (Forxiga®)</div>
+                    <div class="text-xs text-slate-400 mt-1">Inhibiteur SGLT2</div>
+                </div>
+                <span class="text-slate-500">➔</span>
+            </button>
+
+            <button onclick="selectDrug('digoxine')" id="btn-digoxine" class="drug-btn w-full text-left p-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition flex justify-between items-center">
+                <div>
+                    <div class="font-semibold text-slate-200">Digoxine</div>
+                    <div class="text-xs text-slate-400 mt-1">Bloqueur Na+/K+-ATPase</div>
+                </div>
+                <span class="text-slate-500">➔</span>
+            </button>
+
+            <button onclick="selectDrug('clonidine')" id="btn-clonidine" class="drug-btn w-full text-left p-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition flex justify-between items-center">
+                <div>
+                    <div class="font-semibold text-slate-200">Clonidine (Catapressan®)</div>
+                    <div class="text-xs text-slate-400 mt-1">Sympathomimétique central (α2)</div>
+                </div>
+                <span class="text-slate-500">➔</span>
+            </button>
+        </section>
+
+        <!-- Main Screen: Fiche interactive et Visualisation -->
+        <section class="lg:col-span-8 flex flex-col space-y-6">
+            
+            <!-- Carte Visualisation Graphique Active -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 relative overflow-hidden min-h-[300px] flex flex-col justify-between">
+                <div class="absolute top-4 right-4 bg-slate-900 px-3 py-1 rounded-lg border border-slate-800 text-xs flex items-center space-x-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                    <span class="text-slate-300" id="visualizer-status">Simulation en temps réel</span>
+                </div>
+
+                <h3 class="text-lg font-bold text-slate-200 mb-4">Schéma Fonctionnel Intracellulaire</h3>
+
+                <!-- Conteneur d'Animation Dynamique -->
+                <div class="flex-1 flex flex-col md:flex-row items-center justify-around py-4">
+                    <!-- Organe ou Cellule Ciblée -->
+                    <div class="relative flex flex-col items-center">
+                        <div id="visualizer-graphic" class="w-24 h-24 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-4xl">
+                            ❤️
+                        </div>
+                        <div class="text-sm font-semibold mt-3 text-slate-300" id="visualizer-label">Nœud Sino-Auriculaire</div>
+                        <div class="text-xs text-slate-500 mt-1" id="visualizer-sublabel">Zone Pacemaker</div>
+                    </div>
+
+                    <!-- Flux Ioniques/Signaux -->
+                    <div class="flex flex-col items-center justify-center my-4 md:my-0">
+                        <div class="text-xs font-mono text-slate-500 mb-2">Flux de transport</div>
+                        <div class="h-20 w-8 bg-slate-900 rounded-full border border-slate-800 relative flex justify-center overflow-hidden">
+                            <span id="ion-1" class="absolute text-xs ion-drop" style="animation-delay: 0s;">💧</span>
+                            <span id="ion-2" class="absolute text-xs ion-drop" style="animation-delay: 0.5s;">💧</span>
+                        </div>
+                    </div>
+
+                    <!-- Métrique Hémodynamique Interactive -->
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 w-full md:w-48 text-center">
+                        <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1" id="metric-title">Fréquence Cardiaque</div>
+                        <div class="text-3xl font-extrabold text-emerald-400 font-mono" id="metric-value">75 <span class="text-lg">bpm</span></div>
+                        <div class="text-[10px] text-slate-400 mt-1" id="metric-equation">PS = DC × RP</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fiche Clinique Déroulante -->
+            <div class="bg-slate-950/50 border border-slate-800 rounded-2xl p-6">
+                <h3 class="text-xl font-bold text-slate-200 mb-4" id="drug-title">Ivabradine (Procoralan®)</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">Cible & Mécanisme</h4>
+                        <p class="text-sm text-slate-300 leading-relaxed" id="drug-mechanism">
+                            Inhibition sélective et spécifique du courant If (funny) du nœud sino-auriculaire, contrôlant la dépolarisation diastolique spontanée. Ralentit sélectivement la fréquence cardiaque.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-red-400 uppercase tracking-wider mb-1">Point de vigilance clinique</h4>
+                        <p class="text-sm text-slate-300 leading-relaxed" id="drug-vigilance">
+                            Risque majeur de bradycardie sévère. Indiqué uniquement si la fréquence cardiaque au repos est supérieure ou égale à 70-75 bpm.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-slate-800/60 grid grid-cols-2 gap-4 text-xs">
+                    <div>
+                        <span class="text-slate-500 block">Voie d'élimination / Métabolisme :</span>
+                        <span class="text-slate-300 font-medium" id="drug-elimination">Hépatique (CYP3A4 majoritaire)</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 block">Indication Principale :</span>
+                        <span class="text-slate-300 font-medium" id="drug-indication">Insuffisance cardiaque / Angor chronique</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-950 p-4 text-center text-xs text-slate-500">
+        Conçu pour l'étude de la pharmacologie cardiovasculaire clinique - UCLouvain.
+    </footer>
+
+    <!-- Logique Interactive de l'Application -->
+    <script>
+        const drugsData = {
+            ivabradine: {
+                title: "Ivabradine (Procoralan®)",
+                mechanism: "Inhibition sélective et spécifique du courant If ('funny') du nœud sino-auriculaire, bloquant l'influx mixte de Na+/K+ sous -60 mV. Cela allonge la phase de dépolarisation diastolique lente.",
+                vigilance: "Risque de bradycardie sévère. À surveiller de près si le patient présente déjà une FC basse ou s'il prend des médicaments bradycardisants (ex: bêta-bloquants).",
+                elimination: "Hépatique (Substrat majeur du CYP3A4, attention aux interactions !)",
+                indication: "Insuffisance cardiaque chronique stable (FC ≥ 75 bpm) ou Angor si bêta-bloquants contre-indiqués.",
+                graphic: "🫀",
+                graphic_class: "animate-heart",
+                pulse_duration: "1.6s", // Plus lent car bradycardie
+                label: "Canaux Pacemaker If",
+                sublabel: "Nœud Sino-Auriculaire",
+                metric_title: "Fréquence Cardiaque",
+                metric_value: "58 bpm",
+                metric_color: "text-red-400",
+                metric_eq: "FC ↘  ➔  DC ↘  ➔  PS ↘",
+                ion_symbol: "🧂",
+                ion_style: "opacity: 0.3;" // Moins de passage d'ions
+            },
+            dapagliflozine: {
+                title: "Dapagliflozine (Forxiga®)",
+                mechanism: "Inhibition réversible du cotransporteur SGLT2 au niveau du segment S1 du tubule proximal rénal. Bloque la réabsorption du glucose filtré et du sodium, provoquant une diurèse osmotique.",
+                vigilance: "Risque de déshydratation, d'hypovolémie, d'infections uro-génitales (glucosurie importante) et d'acidocétose euglycémique.",
+                elimination: "Urinaire / Rénale (glomérulaire, l'efficacité dépend du DFG)",
+                indication: "Insuffisance cardiaque à fraction d'éjection réduite ou préservée (indépendamment du diabète de type II).",
+                graphic: "肾",
+                graphic_class: "",
+                pulse_duration: "1s",
+                label: "Tubule Proximal S1",
+                sublabel: "Cotransporteur SGLT2",
+                metric_title: "Volume sanguin réabsorbé",
+                metric_value: "- 1.5 L/j",
+                metric_color: "text-cyan-400",
+                metric_eq: "Précharge ↘  ➔  Postcharge ↘",
+                ion_symbol: "🍬",
+                ion_style: "opacity: 1;" // Beaucoup de glucose rejeté
+            },
+            digoxine: {
+                title: "Digoxine",
+                mechanism: "Inhibition spécifique de la pompe membranaire Na+/K+-ATPase. L'accumulation de Na+ intracellulaire bloque indirectement l'échangeur Na+/Ca2+, augmentant la concentration cytoplasmique de Ca2+.",
+                vigilance: "Marge thérapeutique étroite. Signes de toxicité neurologique et visuelle (dyschromatopsie : vision en halo jaune, tableau de Van Gogh). Risque d'arythmies sévères.",
+                elimination: "Essentiellement rénale sous forme inchangée (ajustement posologique obligatoire chez l'insuffisant rénal !)",
+                indication: "Insuffisance cardiaque réfractaire associée à une fibrillation auriculaire (FA).",
+                graphic: "⚡",
+                graphic_class: "animate-pulse",
+                pulse_duration: "0.8s",
+                label: "Membrane Cardiomyocyte",
+                sublabel: "Pompe Na+/K+-ATPase",
+                metric_title: "Force de contraction",
+                metric_value: "+ 40%",
+                metric_color: "text-amber-400",
+                metric_eq: "Inotrope (+)  /  Chronotrope (-)",
+                ion_symbol: "🧪",
+                ion_style: "opacity: 0.8;"
+            },
+            clonidine: {
+                title: "Clonidine (Catapressan®)",
+                mechanism: "Sympathomimétique d'action centrale. Agit comme agoniste des récepteurs alpha-2 adrénergiques présynaptiques au niveau du noyau du tractus solitaire, induisant un rétrocontrôle négatif puissant (sympatho-inhibiteur).",
+                vigilance: "Risque d'effet rebond d'hypertension sévère en cas d'arrêt brutal du traitement. Effets sédatifs et sécheresse buccale fréquents.",
+                elimination: "Rénale (60%) et hépatique",
+                indication: "Hypertension artérielle résistante.",
+                graphic: "🧠",
+                graphic_class: "",
+                pulse_duration: "1s",
+                label: "Noyau du Tractus Solitaire",
+                sublabel: "Récepteurs Alpha-2 Centraux",
+                metric_title: "Noradrénaline circulante",
+                metric_value: "- 45%",
+                metric_color: "text-violet-400",
+                metric_eq: "RP ↘  ➔  PS ↘",
+                ion_symbol: "⚡",
+                ion_style: "opacity: 0.2;"
+            }
+        };
+
+        function selectDrug(drugId) {
+            const data = drugsData[drugId];
+            if (!data) return;
+
+            // Mise à jour de la classe active sur les boutons de la barre latérale
+            document.querySelectorAll('.drug-btn').forEach(btn => {
+                btn.classList.remove('border-emerald-500', 'bg-emerald-950/20');
+                btn.classList.add('border-slate-800', 'bg-slate-900/50');
+                btn.querySelector('span').className = 'text-slate-500';
+                btn.querySelector('span').textContent = '➔';
+            });
+
+            const activeBtn = document.getElementById(`btn-${drugId}`);
+            activeBtn.classList.remove('border-slate-800', 'bg-slate-900/50');
+            activeBtn.classList.add('border-emerald-500', 'bg-emerald-950/20');
+            activeBtn.querySelector('span').className = 'text-emerald-400';
+            activeBtn.querySelector('span').textContent = '●';
+
+            // Mise à jour de la fiche d'informations cliniques
+            document.getElementById('drug-title').textContent = data.title;
+            document.getElementById('drug-mechanism').textContent = data.mechanism;
+            document.getElementById('drug-vigilance').textContent = data.vigilance;
+            document.getElementById('drug-elimination').textContent = data.elimination;
+            document.getElementById('drug-indication').textContent = data.indication;
+
+            // Mise à jour de l'animation et des graphiques
+            const graphicEl = document.getElementById('visualizer-graphic');
+            graphicEl.textContent = data.graphic;
+            graphicEl.className = `w-24 h-24 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-4xl ${data.graphic_class}`;
+            graphicEl.style.setProperty('--pulse-duration', data.pulse_duration);
+
+            document.getElementById('visualizer-label').textContent = data.label;
+            document.getElementById('visualizer-sublabel').textContent = data.sublabel;
+
+            // Mise à jour de la métrique hémodynamique
+            document.getElementById('metric-title').textContent = data.metric_title;
+            const valEl = document.getElementById('metric-value');
+            valEl.innerHTML = data.metric_value;
+            valEl.className = `text-3xl font-extrabold font-mono ${data.metric_color}`;
+            document.getElementById('metric-equation').textContent = data.metric_eq;
+
+            // Mise à jour de l'icône de l'ion animé
+            const ion1 = document.getElementById('ion-1');
+            const ion2 = document.getElementById('ion-2');
+            ion1.textContent = data.ion_symbol;
+            ion2.textContent = data.ion_symbol;
+            ion1.style.cssText = data.ion_style;
+            ion2.style.cssText = data.ion_style;
+        }
+
+        // Sélectionner le premier médicament par défaut au chargement
+        window.onload = () => {
+            selectDrug('ivabradine');
+        };
+    </script>
+</body>
+</html>
