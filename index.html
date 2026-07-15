@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PharmTarget - Atlas Interactif de Pharmacologie</title>
-    <!-- Tailwind CSS pour un design ultra moderne -->
+    <title>PharmTarget - Atlas Interactif des Bêta-Bloquants</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @keyframes pulse-heart {
@@ -15,9 +14,9 @@
             animation: pulse-heart var(--pulse-duration, 1s) infinite ease-in-out;
         }
         @keyframes flow-ion {
-            0% { transform: translateY(-20px); opacity: 0; }
+            0% { transform: translateY(-10px); opacity: 0; }
             50% { opacity: 1; }
-            100% { transform: translateY(30px); opacity: 0; }
+            100% { transform: translateY(20px); opacity: 0; }
         }
         .ion-drop {
             animation: flow-ion 1.5s infinite linear;
@@ -28,221 +27,603 @@
 
     <!-- Header -->
     <header class="border-b border-slate-800 bg-slate-950 p-4 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center space-x-3">
-                <span class="text-2xl">🔬</span>
-                <h1 class="text-xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                    PharmTarget
-                </h1>
+                <span class="text-3xl">🔬</span>
+                <div>
+                    <h1 class="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                        PharmTarget
+                    </h1>
+                    <p class="text-xs text-slate-400">Chapitre III : Les bloqueurs des récepteurs β-adrénergiques</p>
+                </div>
             </div>
-            <span class="bg-emerald-500/10 text-emerald-400 text-xs px-2.5 py-1 rounded-full border border-emerald-500/20 font-medium">
-                Prototype UCLouvain v1.0
-            </span>
+            
+            <!-- Navigation par Onglets -->
+            <nav class="flex bg-slate-900 p-1 rounded-xl border border-slate-800">
+                <button onclick="switchTab('atlas')" id="tab-btn-atlas" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-500 text-slate-950 transition">
+                    Atlas Médicaments
+                </button>
+                <button onclick="switchTab('physio')" id="tab-btn-physio" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-slate-200 transition">
+                    Rappels Physiologiques
+                </button>
+                <button onclick="switchTab('clinique')" id="tab-btn-clinique" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-slate-200 transition">
+                    Sécurité & Clinique
+                </button>
+            </nav>
         </div>
     </header>
 
-    <!-- Main Layout -->
-    <main class="flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- SECTION 1 : ATLAS DES MEDICAMENTS -->
+    <main id="tab-atlas" class="tab-content flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- Sidebar : Liste des médicaments de tes diapositives -->
-        <section class="lg:col-span-4 bg-slate-950/50 border border-slate-800 rounded-2xl p-4 flex flex-col space-y-3">
-            <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">Molécules du cours</h2>
+        <!-- Liste des Bêta-Bloquants (Belgique) -->
+        <section class="lg:col-span-4 bg-slate-950/50 border border-slate-800 rounded-2xl p-4 flex flex-col space-y-3 h-[75vh] overflow-y-auto">
+            <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Molécules de référence (Belgique)</h2>
             
-            <button onclick="selectDrug('ivabradine')" id="btn-ivabradine" class="drug-btn w-full text-left p-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition flex justify-between items-center">
+            <button onclick="selectDrug('bisoprolol')" id="btn-bisoprolol" class="drug-btn w-full text-left p-3.5 rounded-xl border border-emerald-500 bg-emerald-950/20 transition flex justify-between items-center">
                 <div>
-                    <div class="font-semibold text-slate-200">Ivabradine (Procoralan®)</div>
-                    <div class="text-xs text-slate-400 mt-1">Inhibiteur du courant If</div>
+                    <div class="font-bold text-slate-200">Bisoprolol (Isoten®)</div>
+                    <div class="text-[11px] text-slate-400 mt-0.5">β1 sélectif • N°1 des prescriptions</div>
                 </div>
-                <span class="text-emerald-400">➔</span>
+                <span class="text-emerald-400">●</span>
             </button>
 
-            <button onclick="selectDrug('dapagliflozine')" id="btn-dapagliflozine" class="drug-btn w-full text-left p-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition flex justify-between items-center">
+            <button onclick="selectDrug('nebivolol')" id="btn-nebivolol" class="drug-btn w-full text-left p-3.5 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition flex justify-between items-center">
                 <div>
-                    <div class="font-semibold text-slate-200">Dapagliflozine (Forxiga®)</div>
-                    <div class="text-xs text-slate-400 mt-1">Inhibiteur SGLT2</div>
-                </div>
-                <span class="text-slate-500">➔</span>
-            </button>
-
-            <button onclick="selectDrug('digoxine')" id="btn-digoxine" class="drug-btn w-full text-left p-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition flex justify-between items-center">
-                <div>
-                    <div class="font-semibold text-slate-200">Digoxine</div>
-                    <div class="text-xs text-slate-400 mt-1">Bloqueur Na+/K+-ATPase</div>
+                    <div class="font-bold text-slate-200">Nébivolol (Nobiten®)</div>
+                    <div class="text-[11px] text-slate-400 mt-0.5">β1 sélectif + vasodilatation (NO)</div>
                 </div>
                 <span class="text-slate-500">➔</span>
             </button>
 
-            <button onclick="selectDrug('clonidine')" id="btn-clonidine" class="drug-btn w-full text-left p-4 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition flex justify-between items-center">
+            <button onclick="selectDrug('celiprolol')" id="btn-celiprolol" class="drug-btn w-full text-left p-3.5 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition flex justify-between items-center">
                 <div>
-                    <div class="font-semibold text-slate-200">Clonidine (Catapressan®)</div>
-                    <div class="text-xs text-slate-400 mt-1">Sympathomimétique central (α2)</div>
+                    <div class="font-bold text-slate-200">Céliprolol (Selectol®)</div>
+                    <div class="text-[11px] text-slate-400 mt-0.5">β1 sélectif + Agoniste partiel β2 (ASI)</div>
+                </div>
+                <span class="text-slate-500">➔</span>
+            </button>
+
+            <button onclick="selectDrug('propranolol')" id="btn-propranolol" class="drug-btn w-full text-left p-3.5 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition flex justify-between items-center">
+                <div>
+                    <div class="font-bold text-slate-200">Propranolol (Inderal®)</div>
+                    <div class="text-[11px] text-slate-400 mt-0.5">Non sélectif • Très lipophile</div>
+                </div>
+                <span class="text-slate-500">➔</span>
+            </button>
+
+            <button onclick="selectDrug('carvedilol')" id="btn-carvedilol" class="drug-btn w-full text-left p-3.5 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition flex justify-between items-center">
+                <div>
+                    <div class="font-bold text-slate-200">Carvédilol (Kredex®)</div>
+                    <div class="text-[11px] text-slate-400 mt-0.5">Non sélectif + bloquant α1</div>
+                </div>
+                <span class="text-slate-500">➔</span>
+            </button>
+
+            <button onclick="selectDrug('metoprolol')" id="btn-metoprolol" class="drug-btn w-full text-left p-3.5 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition flex justify-between items-center">
+                <div>
+                    <div class="font-bold text-slate-200">Métoprolol (Seloken®)</div>
+                    <div class="text-[11px] text-slate-400 mt-0.5">β1 sélectif • Modèle de titration</div>
+                </div>
+                <span class="text-slate-500">➔</span>
+            </button>
+
+            <button onclick="selectDrug('sotalol')" id="btn-sotalol" class="drug-btn w-full text-left p-3.5 rounded-xl border border-slate-800 hover:border-slate-700 bg-slate-900/50 transition flex justify-between items-center">
+                <div>
+                    <div class="font-bold text-slate-200">Sotalol (Sotalex®)</div>
+                    <div class="text-[11px] text-slate-400 mt-0.5">Non sélectif • Anti-arythmique Cl. III</div>
                 </div>
                 <span class="text-slate-500">➔</span>
             </button>
         </section>
 
-        <!-- Main Screen: Fiche interactive et Visualisation -->
+        <!-- Visualiseur Dynamique & Fiche Moléculaire -->
         <section class="lg:col-span-8 flex flex-col space-y-6">
             
-            <!-- Carte Visualisation Graphique Active -->
+            <!-- Écran Visualisation Graphique -->
             <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6 relative overflow-hidden min-h-[300px] flex flex-col justify-between">
                 <div class="absolute top-4 right-4 bg-slate-900 px-3 py-1 rounded-lg border border-slate-800 text-xs flex items-center space-x-2">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                    <span class="text-slate-300" id="visualizer-status">Simulation en temps réel</span>
+                    <span>Analyse pharmacologique active</span>
                 </div>
 
-                <h3 class="text-lg font-bold text-slate-200 mb-4">Schéma Fonctionnel Intracellulaire</h3>
+                <h3 class="text-lg font-bold text-slate-350">Mécanisme Moléculaire & Cellulaire</h3>
 
-                <!-- Conteneur d'Animation Dynamique -->
-                <div class="flex-1 flex flex-col md:flex-row items-center justify-around py-4">
-                    <!-- Organe ou Cellule Ciblée -->
+                <!-- Animation de l'organe cible -->
+                <div class="flex-1 flex flex-col md:flex-row items-center justify-around py-4 gap-6">
                     <div class="relative flex flex-col items-center">
-                        <div id="visualizer-graphic" class="w-24 h-24 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-4xl">
+                        <div id="vis-graphic" class="w-24 h-24 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-5xl animate-heart">
                             ❤️
                         </div>
-                        <div class="text-sm font-semibold mt-3 text-slate-300" id="visualizer-label">Nœud Sino-Auriculaire</div>
-                        <div class="text-xs text-slate-500 mt-1" id="visualizer-sublabel">Zone Pacemaker</div>
+                        <div id="vis-label" class="text-sm font-semibold mt-3 text-slate-350">Récepteurs cardiaques β1</div>
+                        <div id="vis-sublabel" class="text-xs text-slate-500">Inhibition de la cascade Gs</div>
                     </div>
 
-                    <!-- Flux Ioniques/Signaux -->
-                    <div class="flex flex-col items-center justify-center my-4 md:my-0">
-                        <div class="text-xs font-mono text-slate-500 mb-2">Flux de transport</div>
+                    <!-- Flux de signalisation -->
+                    <div class="flex flex-col items-center justify-center">
+                        <div class="text-[10px] font-mono text-slate-500 mb-2">Activité Intracellulaire</div>
                         <div class="h-20 w-8 bg-slate-900 rounded-full border border-slate-800 relative flex justify-center overflow-hidden">
-                            <span id="ion-1" class="absolute text-xs ion-drop" style="animation-delay: 0s;">💧</span>
-                            <span id="ion-2" class="absolute text-xs ion-drop" style="animation-delay: 0.5s;">💧</span>
+                            <span id="vis-ion-1" class="absolute text-xs ion-drop">⬇️</span>
+                            <span id="vis-ion-2" class="absolute text-xs ion-drop" style="animation-delay: 0.7s;">⬇️</span>
+                        </div>
+                        <div id="vis-flux-label" class="text-[10px] text-slate-400 mt-2 font-mono">AMPc / Ca²⁺ diminués</div>
+                    </div>
+
+                    <!-- Métrique clinique en direct -->
+                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 w-full md:w-52 text-center">
+                        <div id="vis-metric-title" class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">Fréquence Cardiaque (FC)</div>
+                        <div id="vis-metric-value" class="text-3xl font-extrabold text-emerald-400 font-mono">60 <span class="text-sm">bpm</span></div>
+                        <div id="vis-metric-equation" class="text-[10px] text-slate-400 mt-1 font-mono">Effet Chronotrope (-)</div>
+                    </div>
+                </div>
+
+                <!-- Propriétés moléculaires sous forme de Badges -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-4 border-t border-slate-800/60">
+                    <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 text-center">
+                        <span class="text-[10px] text-slate-500 block uppercase">Cardiosélectivité</span>
+                        <span id="prop-select" class="text-xs font-bold text-emerald-400">β1 sélectif</span>
+                    </div>
+                    <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 text-center">
+                        <span class="text-[10px] text-slate-500 block uppercase">Act. Intrinsèque (ASI)</span>
+                        <span id="prop-asi" class="text-xs font-bold text-slate-400">Absente</span>
+                    </div>
+                    <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 text-center">
+                        <span class="text-[10px] text-slate-500 block uppercase">Lipophilie</span>
+                        <span id="prop-lipo" class="text-xs font-bold text-slate-400">Faible</span>
+                    </div>
+                    <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 text-center">
+                        <span class="text-[10px] text-slate-500 block uppercase">Vasodilatateur</span>
+                        <span id="prop-vaso" class="text-xs font-bold text-slate-400">Non</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fiche d'informations cliniques complète -->
+            <div class="bg-slate-950/50 border border-slate-800 rounded-2xl p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <h3 id="drug-name" class="text-2xl font-bold text-slate-200">Bisoprolol (Isoten®)</h3>
+                    <span id="special-badge" class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-500/20">
+                        MAÎTRE-ACHAT BELGIQUE
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-2">Mécanisme d'action moléculaire</h4>
+                        <p id="drug-mechanism" class="text-sm text-slate-300 leading-relaxed">
+                            Antagoniste compétitif hautement sélectif des récepteurs β1 adrénergiques cardiaques. Bloque l'action des catécholamines (noradrénaline/adrénaline) sur l'adénylate cyclase, diminuant la production d'AMPc et l'activation de la PKA.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-red-400 uppercase tracking-wider mb-2">Observations Cliniques & Vigilances</h4>
+                        <p id="drug-vigilance" class="text-sm text-slate-300 leading-relaxed">
+                            Excellente tolérance métabolique et bronchique grâce à sa sélectivité β1. Nécessite une surveillance étroite de la fréquence cardiaque (bradycardie). S'utilise seul ou associé à un diurétique thiazide (Lodoz®, Emcoretic®).
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 pt-4 border-t border-slate-800/60 text-xs">
+                    <div>
+                        <span class="text-slate-500 block">Indications principales :</span>
+                        <span id="drug-indications" class="text-slate-300 font-semibold">Hypertension artérielle, Angor, Insuffisance Cardiaque</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 block">Métabolisme & Élimination :</span>
+                        <span id="drug-metabolism" class="text-slate-300 font-semibold">Élimination équilibrée (rénale et hépatique)</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-500 block">Détail d'intérêt pharmacologique :</span>
+                        <span id="drug-detail" class="text-slate-300 font-semibold">723 000 patients traités en Belgique (2014)</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- SECTION 2 : RAPPELS PHYSIOLOGIQUES -->
+    <main id="tab-physio" class="tab-content flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 hidden grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Système Nerveux Autonome -->
+        <section class="lg:col-span-5 bg-slate-950/50 border border-slate-800 rounded-2xl p-6 flex flex-col space-y-6">
+            <h2 class="text-xl font-bold text-slate-200">Balance Neurovégétative</h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+                Le système nerveux autonome maintient l'homéostasie via l'équilibre dynamique de ses deux branches opposées :
+            </p>
+
+            <div class="grid grid-cols-1 gap-4">
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                    <div class="flex items-center space-x-2 text-emerald-400 mb-2">
+                        <span>Rest & Digest</span>
+                        <h3 class="font-bold text-slate-200">Système Parasympathique</h3>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Prédomine au repos et pendant la digestion. Ralentit le cœur, favorise l'activité digestive et la conservation d'énergie.
+                    </p>
+                </div>
+
+                <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl border-amber-500/20 bg-amber-500/5">
+                    <div class="flex items-center space-x-2 text-amber-400 mb-2">
+                        <span>Fight or Flight 🏃</span>
+                        <h3 class="font-bold text-slate-200">Système Orthosympathique</h3>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Activé lors d'un stress ou effort physique. Libère de la noradrénaline (neurotransmetteur) et de l'adrénaline (neurohormone médullosurrénale) pour préparer l'organisme à l'action.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
+                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Catécholamines Majeures</h3>
+                <ul class="text-xs text-slate-300 space-y-2">
+                    <li>🧪 <strong>Dopamine :</strong> Contient le noyau catéchol fondamental.</li>
+                    <li>🧠 <strong>Noradrénaline :</strong> Principal neurotransmetteur des neurones sympathiques.</li>
+                    <li>⚡ <strong>Adrénaline :</strong> Neurohormone sécrétée par la médullo-surrénale.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Les Cascades Moléculaires -->
+        <section class="lg:col-span-7 flex flex-col space-y-6">
+            
+            <!-- Cascade Cardiaque Bêta-1 (Gs) -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6">
+                <h3 class="text-lg font-bold text-slate-200 mb-3 flex items-center gap-2">
+                    <span>🫀</span> Cascade Cardiaque β1 (Voie Gs)
+                </h3>
+                <p class="text-xs text-slate-400 mb-4">
+                    La liaison des catécholamines sur le récepteur cardiaque β1 active la voie de signalisation suivante :
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 text-center">
+                    <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                        <div class="text-[10px] text-emerald-400 font-mono font-bold">1. Liaison GPCR</div>
+                        <div class="text-xs font-semibold text-slate-300 mt-1">Liaison de l'Agoniste au récepteur β1</div>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                        <div class="text-[10px] text-emerald-400 font-mono font-bold">2. Activation Gs</div>
+                        <div class="text-xs font-semibold text-slate-300 mt-1">Activation d'Adénylate Cyclase</div>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                        <div class="text-[10px] text-emerald-400 font-mono font-bold">3. Second Messager</div>
+                        <div class="text-xs font-semibold text-slate-300 mt-1">↗ AMPc cellulaire & Activation PKA</div>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                        <div class="text-[10px] text-emerald-400 font-mono font-bold">4. Phosphorylation</div>
+                        <div class="text-xs font-semibold text-slate-300 mt-1">Canaux Ca²⁺ ouverts & Phospholamban P</div>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-lg border border-slate-800">
+                        <div class="text-[10px] text-emerald-400 font-mono font-bold">5. Effet Physiologique</div>
+                        <div class="text-xs font-semibold text-slate-300 mt-1">Recapture active Ca²⁺ (SERCA)</div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 mt-4">
+                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Les 5 effets cardiaques cardinaux</h4>
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-2 text-center text-[11px]">
+                        <div class="bg-slate-950 p-2 rounded border border-slate-800">
+                            <span class="text-emerald-400 font-bold block">Chronotrope +</span>
+                            <span>Fréquence cardiaque</span>
+                        </div>
+                        <div class="bg-slate-950 p-2 rounded border border-slate-800">
+                            <span class="text-emerald-400 font-bold block">Inotrope +</span>
+                            <span>Force de contraction</span>
+                        </div>
+                        <div class="bg-slate-950 p-2 rounded border border-slate-800">
+                            <span class="text-emerald-400 font-bold block">Lusitrope +</span>
+                            <span>Relaxation cardiaque</span>
+                        </div>
+                        <div class="bg-slate-950 p-2 rounded border border-slate-800">
+                            <span class="text-emerald-400 font-bold block">Dromotrope +</span>
+                            <span>Vitesse de conduction</span>
+                        </div>
+                        <div class="bg-slate-950 p-2 rounded border border-slate-800">
+                            <span class="text-emerald-400 font-bold block">Bathmotrope +</span>
+                            <span>Excitabilité cardiaque</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Double signalisation Vasculaire (Alpha-1 Gq vs Beta-2 Gs) -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6">
+                <h3 class="text-lg font-bold text-slate-200 mb-3 flex items-center gap-2">
+                    <span>🩸</span> Contraction vs Relaxation Vasculaire
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-slate-900/50 border border-slate-800 p-4 rounded-xl">
+                        <h4 class="text-sm font-bold text-red-400 mb-2">Vasoconstriction (Voie Gq - Récepteurs α1)</h4>
+                        <p class="text-xs text-slate-350 mb-3 leading-relaxed">
+                            Médiée par les récepteurs α1 dans les vaisseaux de la sphère digestive. 
+                        </p>
+                        <div class="bg-slate-950 p-3 rounded-lg text-[11px] font-mono text-slate-400 space-y-1">
+                            <div>Activation Gq ➔ Phospholipase C (PLC)</div>
+                            <div>Production d'IP3 ➔ Libération Ca²⁺ via RE</div>
+                            <div>Activation de la MLCK ➔ Contraction</div>
+                            <div>DAG ➔ Activation PKC ➔ Inhibition de la MLCP</div>
                         </div>
                     </div>
 
-                    <!-- Métrique Hémodynamique Interactive -->
-                    <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 w-full md:w-48 text-center">
-                        <div class="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1" id="metric-title">Fréquence Cardiaque</div>
-                        <div class="text-3xl font-extrabold text-emerald-400 font-mono" id="metric-value">75 <span class="text-lg">bpm</span></div>
-                        <div class="text-[10px] text-slate-400 mt-1" id="metric-equation">PS = DC × RP</div>
+                    <div class="bg-slate-900/50 border border-slate-800 p-4 rounded-xl">
+                        <h4 class="text-sm font-bold text-cyan-400 mb-2">Vasodilatation (Voie Gs - Récepteurs β2)</h4>
+                        <p class="text-xs text-slate-350 mb-3 leading-relaxed">
+                            Médiée par les récepteurs β2 dans les vaisseaux musculaires squelettiques et hépatiques.
+                        </p>
+                        <div class="bg-slate-950 p-3 rounded-lg text-[11px] font-mono text-slate-400 space-y-1">
+                            <div>Activation Gs ➔ Adénylate cyclase</div>
+                            <div>↗ AMPc ➔ Activation de la protéine kinase A (PKA)</div>
+                            <div>PKA phosphoryle la MLCK ➔ Devient moins active</div>
+                            <div>Inhibition de la contraction ➔ Vasodilatation</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- SECTION 3 : SECURITE & CLINIQUE -->
+    <main id="tab-clinique" class="tab-content flex-1 max-w-7xl w-full mx-auto p-4 lg:p-6 hidden grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Règles d'Or de Sécurité Clinique -->
+        <section class="lg:col-span-6 bg-slate-950/50 border border-slate-800 rounded-2xl p-6 flex flex-col space-y-6">
+            <h2 class="text-xl font-bold text-slate-200">Précautions Cliniques d'un Bêta-Bloquant</h2>
+
+            <!-- Titration en cas d'insuffisance cardiaque -->
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                <div class="flex items-center space-x-2 text-amber-400 mb-2">
+                    <span class="text-lg">⚠️</span>
+                    <h3 class="font-bold text-slate-200 uppercase tracking-wider text-xs">La Règle d'Or de la Titration</h3>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                    Dans l'insuffisance cardiaque, seuls <strong>Métoprolol, Bisoprolol, Carvédilol, Nébivolol</strong> ont prouvé leur effet cardioprotecteur. Une titration lente et progressive est obligatoire chez un patient stable !
+                </p>
+                <!-- Outil de démonstration -->
+                <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-center">
+                    <span class="text-[10px] text-slate-500 block">Exemple Clinique : Seloken® (Métoprolol)</span>
+                    <div class="flex justify-between items-center mt-2 px-4">
+                        <span class="bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-1 rounded text-xs">25 mg (Initiation IC)</span>
+                        <span class="text-slate-500">➔</span>
+                        <span class="bg-slate-900 border border-slate-800 px-2 py-1 rounded text-xs">50 - 100 mg</span>
+                        <span class="text-slate-500">➔</span>
+                        <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-1 rounded text-xs">200 mg (Max Hypertension)</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Fiche Clinique Déroulante -->
-            <div class="bg-slate-950/50 border border-slate-800 rounded-2xl p-6">
-                <h3 class="text-xl font-bold text-slate-200 mb-4" id="drug-title">Ivabradine (Procoralan®)</h3>
-                
+            <!-- Risque Diabète -->
+            <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+                <div class="flex items-center space-x-2 text-cyan-400 mb-2">
+                    <span class="text-lg">🩸</span>
+                    <h3 class="font-bold text-slate-200 uppercase tracking-wider text-xs">Vigilance Patient Diabétique</h3>
+                </div>
+                <ul class="text-xs text-slate-300 space-y-2 list-disc pl-4">
+                    <li><strong>Masquage clinique de l'hypoglycémie :</strong> Bloque les palpitations, l'anxiété et les tremblements avertisseurs.</li>
+                    <li><strong>Régulation glucidique perturbée :</strong> Empêche la libération de glucose induite par l'adrénaline.</li>
+                    <li><strong>Action requise :</strong> Préférer les bloqueurs hautement β1-sélectifs (Bisoprolol, Nébivolol).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Contre-Indications et Effets Secondaires -->
+        <section class="lg:col-span-6 flex flex-col space-y-6">
+            
+            <!-- Contre-indications majeures -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6">
+                <h3 class="text-lg font-bold text-red-400 mb-3 flex items-center gap-2">
+                    <span>❌</span> Contre-Indications Absolues
+                </h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <h4 class="text-xs font-bold text-emerald-400 uppercase tracking-wider mb-1">Cible & Mécanisme</h4>
-                        <p class="text-sm text-slate-300 leading-relaxed" id="drug-mechanism">
-                            Inhibition sélective et spécifique du courant If (funny) du nœud sino-auriculaire, contrôlant la dépolarisation diastolique spontanée. Ralentit sélectivement la fréquence cardiaque.
+                    <div class="bg-slate-900 p-4 rounded-xl border border-red-500/10">
+                        <span class="text-red-400 font-bold text-xs block mb-1">Asthme Sévère</span>
+                        <p class="text-xs text-slate-350 leading-relaxed">
+                            Le blocage des récepteurs pulmonaires β2 provoque un bronchospasme immédiat et mortel. (La BPCO tolère mieux les β1-sélectifs).
                         </p>
                     </div>
-                    <div>
-                        <h4 class="text-xs font-bold text-red-400 uppercase tracking-wider mb-1">Point de vigilance clinique</h4>
-                        <p class="text-sm text-slate-300 leading-relaxed" id="drug-vigilance">
-                            Risque majeur de bradycardie sévère. Indiqué uniquement si la fréquence cardiaque au repos est supérieure ou égale à 70-75 bpm.
+                    <div class="bg-slate-900 p-4 rounded-xl border border-red-500/10">
+                        <span class="text-red-400 font-bold text-xs block mb-1">Bradycardie & Blocs AV</span>
+                        <p class="text-xs text-slate-350 leading-relaxed">
+                            Une réduction supplémentaire de la fréquence cardiaque et de la conduction cardiaque peut déclencher un arrêt cardiaque dromotrope négatif.
                         </p>
                     </div>
-                </div>
-
-                <div class="mt-4 pt-4 border-t border-slate-800/60 grid grid-cols-2 gap-4 text-xs">
-                    <div>
-                        <span class="text-slate-500 block">Voie d'élimination / Métabolisme :</span>
-                        <span class="text-slate-300 font-medium" id="drug-elimination">Hépatique (CYP3A4 majoritaire)</span>
+                    <div class="bg-slate-900 p-4 rounded-xl border border-red-500/10">
+                        <span class="text-red-400 font-bold text-xs block mb-1">Syndrome de Raynaud</span>
+                        <p class="text-xs text-slate-350 leading-relaxed">
+                            Une maladie vasculaire périphérique est accentuée par la vasoconstriction périphérique induite par le blocage des récepteurs β2.
+                        </p>
                     </div>
-                    <div>
-                        <span class="text-slate-500 block">Indication Principale :</span>
-                        <span class="text-slate-300 font-medium" id="drug-indication">Insuffisance cardiaque / Angor chronique</span>
+                    <div class="bg-slate-900 p-4 rounded-xl border border-red-500/10">
+                        <span class="text-red-400 font-bold text-xs block mb-1">Dépression Sévère</span>
+                        <p class="text-xs text-slate-350 leading-relaxed">
+                            Les bêta-bloquants hautement lipophiles (ex: Propranolol) traversent facilement la BHE et favorisent les syndromes dépressifs et les insomnies.
+                        </p>
                     </div>
                 </div>
             </div>
 
+            <!-- Effets Secondaires Communs -->
+            <div class="bg-slate-950 border border-slate-800 rounded-2xl p-6">
+                <h3 class="text-lg font-bold text-slate-200 mb-3">
+                    📋 Effets Indésirables Importants en Officine
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-center text-xs">
+                    <div class="bg-slate-900 p-3 rounded-lg">
+                        <span class="font-bold text-slate-300 block mb-1">Spasmes Musculaires</span>
+                        <span class="text-slate-400">Extrémités froides, bronchospasmes.</span>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-lg">
+                        <span class="font-bold text-slate-300 block mb-1">SNC (Surtout Lipophiles)</span>
+                        <span class="text-slate-400">Fatigue importante, insomnies, cauchemars.</span>
+                    </div>
+                    <div class="bg-slate-900 p-3 rounded-lg">
+                        <span class="font-bold text-slate-300 block mb-1">Profil Lipidique</span>
+                        <span class="text-slate-400">Perturbations de la lipidémie (moins fréquents si ASI).</span>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
 
     <!-- Footer -->
     <footer class="border-t border-slate-800 bg-slate-950 p-4 text-center text-xs text-slate-500">
-        Conçu pour l'étude de la pharmacologie cardiovasculaire clinique - UCLouvain.
+        PharmTarget • Conçu pour l'étude de la pharmacologie cardiovasculaire clinique - UCLouvain.
     </footer>
 
-    <!-- Logique Interactive de l'Application -->
+    <!-- Logique de l'application -->
     <script>
         const drugsData = {
-            ivabradine: {
-                title: "Ivabradine (Procoralan®)",
-                mechanism: "Inhibition sélective et spécifique du courant If ('funny') du nœud sino-auriculaire, bloquant l'influx mixte de Na+/K+ sous -60 mV. Cela allonge la phase de dépolarisation diastolique lente.",
-                vigilance: "Risque de bradycardie sévère. À surveiller de près si le patient présente déjà une FC basse ou s'il prend des médicaments bradycardisants (ex: bêta-bloquants).",
-                elimination: "Hépatique (Substrat majeur du CYP3A4, attention aux interactions !)",
-                indication: "Insuffisance cardiaque chronique stable (FC ≥ 75 bpm) ou Angor si bêta-bloquants contre-indiqués.",
-                graphic: "🫀",
-                graphic_class: "animate-heart",
-                pulse_duration: "1.6s", // Plus lent car bradycardie
-                label: "Canaux Pacemaker If",
-                sublabel: "Nœud Sino-Auriculaire",
-                metric_title: "Fréquence Cardiaque",
-                metric_value: "58 bpm",
-                metric_color: "text-red-400",
-                metric_eq: "FC ↘  ➔  DC ↘  ➔  PS ↘",
-                ion_symbol: "🧂",
-                ion_style: "opacity: 0.3;" // Moins de passage d'ions
+            bisoprolol: {
+                title: "Bisoprolol (Isoten®)",
+                mechanism: "Antagoniste compétitif hautement sélectif des récepteurs cardiaques β1. Inhibe l'effet sympathique direct, ce qui ralentit la fréquence cardiaque et abaisse la contractilité myocardique. Très faible effet sur la régulation de la glycémie.",
+                vigilance: "Le bêta-bloquant de choix (maître-achat) en Belgique. Très prescrit sous forme d'associations avec des diurétiques thiazides (Lodoz®, Emcoretic®) pour renforcer le traitement contre l'hypertension.",
+                elimination: "Voie d'élimination équilibrée (rénale / hépatique)",
+                indications: "Hypertension artérielle, Angor, Insuffisance cardiaque stable",
+                detail: "Plus de 723 000 patients traités en Belgique (2014)",
+                propSelect: "Cardiosélectif (β1)",
+                propAsi: "Absente",
+                propLipo: "Faible",
+                propVaso: "Non",
+                graphic: "❤️",
+                graphicClass: "animate-heart",
+                pulseDuration: "1.5s",
+                metricTitle: "Fréquence Cardiaque (FC)",
+                metricValue: "60 <span class='text-sm'>bpm</span>",
+                metricEq: "DC ↘  ➔  PS ↘",
+                ionSymbol: "⬇️"
             },
-            dapagliflozine: {
-                title: "Dapagliflozine (Forxiga®)",
-                mechanism: "Inhibition réversible du cotransporteur SGLT2 au niveau du segment S1 du tubule proximal rénal. Bloque la réabsorption du glucose filtré et du sodium, provoquant une diurèse osmotique.",
-                vigilance: "Risque de déshydratation, d'hypovolémie, d'infections uro-génitales (glucosurie importante) et d'acidocétose euglycémique.",
-                elimination: "Urinaire / Rénale (glomérulaire, l'efficacité dépend du DFG)",
-                indication: "Insuffisance cardiaque à fraction d'éjection réduite ou préservée (indépendamment du diabète de type II).",
-                graphic: "肾",
-                graphic_class: "",
-                pulse_duration: "1s",
-                label: "Tubule Proximal S1",
-                sublabel: "Cotransporteur SGLT2",
-                metric_title: "Volume sanguin réabsorbé",
-                metric_value: "- 1.5 L/j",
-                metric_color: "text-cyan-400",
-                metric_eq: "Précharge ↘  ➔  Postcharge ↘",
-                ion_symbol: "🍬",
-                ion_style: "opacity: 1;" // Beaucoup de glucose rejeté
+            nebivolol: {
+                title: "Nébivolol (Nobiten®)",
+                mechanism: "Bêta-bloquant sélectif β1. Possède une activité agoniste auxiliaire β3 qui stimule la NO synthase endothéliale (découvert à l'UCLouvain). Cela favorise la libération de Monoxyde d'Azote (NO), le plus puissant vasodilatateur.",
+                vigilance: "Excellente molécule de choix car elle combat le principal effet secondaire des bêta-bloquants classiques (la vasoconstriction coronarienne et périphérique réflexe).",
+                elimination: "Hépatique et Rénale",
+                indications: "Hypertension, Insuffisance cardiaque",
+                detail: "Plus de 200 000 patients belges (2014)",
+                propSelect: "Cardiosélectif (β1)",
+                propAsi: "Présente (β3)",
+                propLipo: "Moyenne (+)",
+                propVaso: "Oui (via NO)",
+                graphic: "💨",
+                graphicClass: "animate-pulse",
+                pulseDuration: "1.1s",
+                metricTitle: "Vasodilatation Coronarienne",
+                metricValue: "+ 30%",
+                metricEq: "Production de NO ↗  ➔  RP ↘",
+                ionSymbol: "💎"
             },
-            digoxine: {
-                title: "Digoxine",
-                mechanism: "Inhibition spécifique de la pompe membranaire Na+/K+-ATPase. L'accumulation de Na+ intracellulaire bloque indirectement l'échangeur Na+/Ca2+, augmentant la concentration cytoplasmique de Ca2+.",
-                vigilance: "Marge thérapeutique étroite. Signes de toxicité neurologique et visuelle (dyschromatopsie : vision en halo jaune, tableau de Van Gogh). Risque d'arythmies sévères.",
-                elimination: "Essentiellement rénale sous forme inchangée (ajustement posologique obligatoire chez l'insuffisant rénal !)",
-                indication: "Insuffisance cardiaque réfractaire associée à une fibrillation auriculaire (FA).",
-                graphic: "⚡",
-                graphic_class: "animate-pulse",
-                pulse_duration: "0.8s",
-                label: "Membrane Cardiomyocyte",
-                sublabel: "Pompe Na+/K+-ATPase",
-                metric_title: "Force de contraction",
-                metric_value: "+ 40%",
-                metric_color: "text-amber-400",
-                metric_eq: "Inotrope (+)  /  Chronotrope (-)",
-                ion_symbol: "🧪",
-                ion_style: "opacity: 0.8;"
+            celiprolol: {
+                title: "Céliprolol (Selectol®)",
+                mechanism: "Antagoniste β1 sélectif avec une activité agoniste partielle β2 (Activité Sympathique Intrinsèque - ASI) et une action bloquante auxiliaire α2.",
+                vigilance: "La stimulation partielle β2 vasculaire prévient la vasoconstriction des extrémités. Idéal pour éviter le refroidissement périphérique et préserver la tolérance chez les patients bradycardes au repos.",
+                elimination: "Rénale majoritaire",
+                indications: "Hypertension artérielle, Angor d'effort",
+                detail: "Prévient les processus de remodelage de l'athérome.",
+                propSelect: "Cardiosélectif (β1)",
+                propAsi: "Présente (β2)",
+                propLipo: "Faible",
+                propVaso: "Oui (via β2)",
+                graphic: "🔋",
+                graphicClass: "",
+                pulseDuration: "1s",
+                metricTitle: "Fréquence Cardiaque Repos",
+                metricValue: "68 <span class='text-sm'>bpm</span>",
+                metricEq: "Effet d'agoniste partiel protecteur",
+                ionSymbol: "🔋"
             },
-            clonidine: {
-                title: "Clonidine (Catapressan®)",
-                mechanism: "Sympathomimétique d'action centrale. Agit comme agoniste des récepteurs alpha-2 adrénergiques présynaptiques au niveau du noyau du tractus solitaire, induisant un rétrocontrôle négatif puissant (sympatho-inhibiteur).",
-                vigilance: "Risque d'effet rebond d'hypertension sévère en cas d'arrêt brutal du traitement. Effets sédatifs et sécheresse buccale fréquents.",
-                elimination: "Rénale (60%) et hépatique",
-                indication: "Hypertension artérielle résistante.",
+            propranolol: {
+                title: "Propranolol (Inderal®)",
+                mechanism: "Antagoniste compétitif non sélectif (bloque β1 et β2 à parts égales). Dépourvu d'activité sympathique intrinsèque (ASI). Effet stabilisateur de membrane prononcé (Classe I).",
+                vigilance: "Chef de file historique des bêta-bloquants. Extrêmement lipophile, il passe la BHE, d'où son utilisation en prophylaxie de la migraine et contre le stress. Cependant, il provoque de l'anxiété, dépression et cauchemars.",
+                elimination: "Hépatique (Subit un très fort premier passage)",
+                indications: "Migraine, Hypertension portale, Anxiété (Tachycardie), Hémangiome",
+                detail: "Utilisé comme agent dopant pour les sports de précision.",
+                propSelect: "Non sélectif (β1, β2)",
+                propAsi: "Absente",
+                propLipo: "Très Forte (++)",
+                propVaso: "Non (Vasoconstriction)",
                 graphic: "🧠",
-                graphic_class: "",
-                pulse_duration: "1s",
-                label: "Noyau du Tractus Solitaire",
-                sublabel: "Récepteurs Alpha-2 Centraux",
-                metric_title: "Noradrénaline circulante",
-                metric_value: "- 45%",
-                metric_color: "text-violet-400",
-                metric_eq: "RP ↘  ➔  PS ↘",
-                ion_symbol: "⚡",
-                ion_style: "opacity: 0.2;"
+                graphicClass: "",
+                pulseDuration: "1.8s",
+                metricTitle: "Traverse la BHE",
+                metricValue: "Forte",
+                metricEq: "Indication : Prophylaxie de la migraine",
+                ionSymbol: "⚠️"
+            },
+            carvedilol: {
+                title: "Carvédilol (Kredex®)",
+                mechanism: "Antagoniste non sélectif des récepteurs adrénergiques β1 et β2 avec une activité bloquante auxiliaire sélective du récepteur α1.",
+                vigilance: "Le blocage α1 inhibe la vasoconstriction médiée par le système Gq des vaisseaux. Cela provoque une baisse nette de la résistance vasculaire systémique sans diminuer le volume d'éjection systolique.",
+                elimination: "Hépatique exclusive",
+                indications: "Insuffisance cardiaque chronique stable",
+                detail: "Effet antioxydant remarquable (démontré in vitro).",
+                propSelect: "Non sélectif",
+                propAsi: "Absente",
+                propLipo: "Moyenne (+)",
+                propVaso: "Oui (via α-bloquant)",
+                graphic: "🧬",
+                graphicClass: "animate-pulse",
+                pulseDuration: "1.2s",
+                metricTitle: "Résistance Périphérique",
+                metricValue: "- 25%",
+                metricEq: "Inhibition de la voie Gq (MLCK)",
+                ionSymbol: "🛡️"
+            },
+            metoprolol: {
+                title: "Métoprolol (Seloken®)",
+                mechanism: "Bloqueur sélectif des récepteurs β1 adrénergiques cardiaques. Réduit de façon marquée la consommation d'oxygène myocardique en limitant la fréquence cardiaque au repos et à l'effort.",
+                vigilance: "Exemple clé pour la titration clinique obligatoire en cas d'insuffisance cardiaque stable : commencer par 25 mg par jour avant d'augmenter vers la posologie standard de 100 à 200 mg.",
+                elimination: "Hépatique (Métabolites inactifs)",
+                indications: "Post-infarctus, Hypertension, Prophylaxie Migraine",
+                detail: "Réduction prouvée de 25% de la mortalité post-infarctus.",
+                propSelect: "Cardiosélectif (β1)",
+                propAsi: "Absente",
+                propLipo: "Moyenne (+)",
+                propVaso: "Non",
+                graphic: "🩺",
+                graphicClass: "animate-heart",
+                pulseDuration: "1.6s",
+                metricTitle: "Dose standard initiation",
+                metricValue: "25 <span class='text-sm'>mg/j</span>",
+                metricEq: "Augmentation lente progressive requise",
+                ionSymbol: "📉"
+            },
+            sotalol: {
+                title: "Sotalol (Sotalex®)",
+                mechanism: "Antagoniste non sélectif des récepteurs β-adrénergiques associé à un blocage sélectif des canaux potassium rectificateurs retardés (effet anti-arythmique de classe III).",
+                vigilance: "Seul bêta-bloquant de classe III. Prolonge la durée du potentiel d'action et la période réfractaire au niveau cardiaque. À utiliser uniquement sous surveillance de l'intervalle QT.",
+                elimination: "Rénale exclusive (inchangée)",
+                indications: "Prévention des récidives de fibrillation auriculaire",
+                detail: "Mollécule hydrophile sans passage de la BHE.",
+                propSelect: "Non sélectif",
+                propAsi: "Absente",
+                propLipo: "Faible (0)",
+                propVaso: "Non",
+                graphic: "⚡",
+                graphicClass: "animate-pulse",
+                pulseDuration: "0.7s",
+                metricTitle: "Potentiel d'action",
+                metricValue: "+ 150ms",
+                metricEq: "Effet anti-arythmique de classe III",
+                ionSymbol: "🛑"
             }
         };
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-emerald-500', 'text-slate-950');
+                btn.classList.add('text-slate-400', 'hover:text-slate-200');
+            });
+
+            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+            activeBtn.classList.remove('text-slate-400', 'hover:text-slate-200');
+            activeBtn.classList.add('bg-emerald-500', 'text-slate-950');
+        }
 
         function selectDrug(drugId) {
             const data = drugsData[drugId];
             if (!data) return;
 
-            // Mise à jour de la classe active sur les boutons de la barre latérale
             document.querySelectorAll('.drug-btn').forEach(btn => {
                 btn.classList.remove('border-emerald-500', 'bg-emerald-950/20');
                 btn.classList.add('border-slate-800', 'bg-slate-900/50');
@@ -256,42 +637,37 @@
             activeBtn.querySelector('span').className = 'text-emerald-400';
             activeBtn.querySelector('span').textContent = '●';
 
-            // Mise à jour de la fiche d'informations cliniques
-            document.getElementById('drug-title').textContent = data.title;
+            // Fiche descriptive
+            document.getElementById('drug-name').textContent = data.title;
             document.getElementById('drug-mechanism').textContent = data.mechanism;
             document.getElementById('drug-vigilance').textContent = data.vigilance;
-            document.getElementById('drug-elimination').textContent = data.elimination;
-            document.getElementById('drug-indication').textContent = data.indication;
+            document.getElementById('drug-indications').textContent = data.indications;
+            document.getElementById('drug-metabolism').textContent = data.elimination;
+            document.getElementById('drug-detail').textContent = data.detail;
 
-            // Mise à jour de l'animation et des graphiques
-            const graphicEl = document.getElementById('visualizer-graphic');
+            // Badges propriétés
+            document.getElementById('prop-select').textContent = data.propSelect;
+            document.getElementById('prop-asi').textContent = data.propAsi;
+            document.getElementById('prop-lipo').textContent = data.propLipo;
+            document.getElementById('prop-vaso').textContent = data.propVaso;
+
+            // Visualiseur graphique
+            const graphicEl = document.getElementById('vis-graphic');
             graphicEl.textContent = data.graphic;
-            graphicEl.className = `w-24 h-24 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-4xl ${data.graphic_class}`;
-            graphicEl.style.setProperty('--pulse-duration', data.pulse_duration);
+            graphicEl.className = `w-24 h-24 rounded-full bg-slate-900 border border-slate-700 flex items-center justify-center text-5xl ${data.graphicClass}`;
+            graphicEl.style.setProperty('--pulse-duration', data.pulseDuration);
 
-            document.getElementById('visualizer-label').textContent = data.label;
-            document.getElementById('visualizer-sublabel').textContent = data.sublabel;
+            document.getElementById('vis-label').textContent = data.label || data.title;
+            document.getElementById('vis-sublabel').textContent = data.propSelect;
 
-            // Mise à jour de la métrique hémodynamique
-            document.getElementById('metric-title').textContent = data.metric_title;
-            const valEl = document.getElementById('metric-value');
-            valEl.innerHTML = data.metric_value;
-            valEl.className = `text-3xl font-extrabold font-mono ${data.metric_color}`;
-            document.getElementById('metric-equation').textContent = data.metric_eq;
+            document.getElementById('vis-metric-title').textContent = data.metricTitle;
+            document.getElementById('vis-metric-value').innerHTML = data.metricValue;
+            document.getElementById('vis-metric-equation').textContent = data.metricEq;
 
-            // Mise à jour de l'icône de l'ion animé
-            const ion1 = document.getElementById('ion-1');
-            const ion2 = document.getElementById('ion-2');
-            ion1.textContent = data.ion_symbol;
-            ion2.textContent = data.ion_symbol;
-            ion1.style.cssText = data.ion_style;
-            ion2.style.cssText = data.ion_style;
+            document.getElementById('vis-flux-label').textContent = data.flux_title || "AMPc / Ca²⁺ diminués";
+            document.getElementById('vis-ion-1').textContent = data.ionSymbol;
+            document.getElementById('vis-ion-2').textContent = data.ionSymbol;
         }
-
-        // Sélectionner le premier médicament par défaut au chargement
-        window.onload = () => {
-            selectDrug('ivabradine');
-        };
     </script>
 </body>
 </html>
